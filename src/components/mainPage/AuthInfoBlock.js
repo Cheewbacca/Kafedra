@@ -57,7 +57,7 @@ const AuthInfoBlock = () => (
         disableRipple
         variant="text"
         startIcon={<Pencil />}
-        text="Реєстрація"
+        text="Авторизація"
         colorVariant="link"
       />
     </Box>
