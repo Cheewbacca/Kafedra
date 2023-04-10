@@ -1,6 +1,7 @@
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import StyledButton from "../UI/StyledButton";
 import Pencil from "../../icons/Pencil";
+import { useModalState } from "../modalWindow/ModalContext";
 
 const styles = {
   authorizationBlock: {
@@ -35,33 +36,38 @@ const styles = {
   },
 };
 
-const AuthInfoBlock = () => (
-  <Paper sx={styles.authorizationBlock} elevation={0}>
-    <Box sx={styles.authorizationBlockImg} />
-    <Divider orientation="vertical" sx={styles.divider} />
-    <Box sx={styles.authorizationBlockInfo}>
-      <Typography
-        variant="h3"
-        children="Всього крок до користування!"
-        gutterBottom
-      />
-      <Typography
-        children="Для повного розкриття можливостей і функцій сайту необхідно авторизуватись в системі."
-        gutterBottom
-      />
-      <Typography
-        children="Заповни поля у віконці реєстрації і працюй на повну!"
-        gutterBottom
-      />
-      <StyledButton
-        disableRipple
-        variant="text"
-        startIcon={<Pencil />}
-        text="Авторизація"
-        colorVariant="link"
-      />
-    </Box>
-  </Paper>
-);
+const AuthInfoBlock = () => {
+  const { toggleModal } = useModalState();
+
+  return (
+    <Paper sx={styles.authorizationBlock} elevation={0}>
+      <Box sx={styles.authorizationBlockImg} />
+      <Divider orientation="vertical" sx={styles.divider} />
+      <Box sx={styles.authorizationBlockInfo}>
+        <Typography
+          variant="h3"
+          children="Всього крок до користування!"
+          gutterBottom
+        />
+        <Typography
+          children="Для повного розкриття можливостей і функцій сайту необхідно авторизуватись в системі."
+          gutterBottom
+        />
+        <Typography
+          children="Заповни поля у віконці реєстрації і працюй на повну!"
+          gutterBottom
+        />
+        <StyledButton
+          disableRipple
+          variant="text"
+          startIcon={<Pencil />}
+          text="Авторизація"
+          colorVariant="link"
+          onClick={toggleModal}
+        />
+      </Box>
+    </Paper>
+  );
+};
 
 export default AuthInfoBlock;

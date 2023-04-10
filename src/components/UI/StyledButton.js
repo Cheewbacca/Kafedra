@@ -46,6 +46,17 @@ const colorVariants = {
       },
     },
   },
+  blue: {
+    backgroundColor: "primary.main",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "secondary.main",
+      color: "white",
+    },
+    "&:disabled": {
+      backgroundColor: "#F5F5F5",
+    },
+  },
 };
 
 const StyledButton = ({
@@ -55,12 +66,14 @@ const StyledButton = ({
   colorVariant,
   sx,
   disableRipple,
+  ...props
 }) => (
   <Button
     sx={[sx, styles.button, colorVariant && colorVariants[colorVariant]]}
     variant={variant}
     startIcon={startIcon}
     disableRipple={disableRipple}
+    {...props}
   >
     {text}
   </Button>
