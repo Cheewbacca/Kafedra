@@ -50,6 +50,11 @@ const theme = createTheme({
       fontSize: "18px",
       lineHeight: "21px",
     },
+    body2: {
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "16px",
+    },
     button: {
       textTransform: "none",
       fontWeight: 700,

@@ -6,20 +6,17 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "@fontsource/roboto/900.css";
 import theme from "./theme";
-import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "./components/Layout";
-
-// Create a client
-const queryClient = new QueryClient();
+import AuthState from "./AuthContext";
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <AuthState>
     <Router>
       <ThemeProvider theme={theme}>
         <Layout />
       </ThemeProvider>
     </Router>
-  </QueryClientProvider>
+  </AuthState>
 );
 
 export default App;
