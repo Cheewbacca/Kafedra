@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 const initialData = {
   id: null,
+  firstName: "",
+  lastName: "",
 };
 
 const AuthContext = createContext(initialData);

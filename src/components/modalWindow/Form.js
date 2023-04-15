@@ -8,8 +8,8 @@ import {
 import { useState } from "react";
 import StyledButton from "../UI/StyledButton";
 import Login from "../../icons/Login";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext";
+import { useModalState } from "./ModalContext";
 
 const styles = {
   wrapper: {
@@ -42,8 +42,8 @@ const styles = {
 };
 
 const Form = () => {
-  const navigate = useNavigate();
   const { setAuthData } = useAuth();
+  const { toggleModal } = useModalState();
 
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -64,12 +64,12 @@ const Form = () => {
     }
 
     // TODO: extend with API call
-    Promise.resolve({ id: 1 })
+    Promise.resolve({ id: 1, firstName: "Ivan", lastName: "Daun" })
       .then((res) => {
         setAuthData(res);
       })
       .then(() => {
-        navigate("/control");
+        toggleModal();
       });
   };
 

@@ -1,7 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import Logo from "../icons/Logo";
 import menuItems from "../mocks/headerMenuItems.json";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+import StyledButton from "./UI/StyledButton";
+import Login from "../icons/Login";
 
 const styles = {
   wrapper: {
@@ -43,24 +46,64 @@ const styles = {
       },
     },
   },
+  avatar: {
+    height: "54px",
+    width: "54px",
+    backgroundColor: "secondary.main",
+    textTransform: "uppercase",
+    color: "white",
+  },
 };
 
-const Header = () => (
-  <Box component="header" sx={styles.wrapper}>
-    <Box className="container" sx={styles.content}>
-      <Box sx={styles.logoBox}>
-        <Logo />
-        <Typography variant="h1" children="Study with KPI" />
-      </Box>
-      <Box sx={styles.menuItems}>
-        {menuItems.map(({ url, text }) => (
-          <Typography key={url} variant="body1">
-            <NavLink to={url} children={text} />
-          </Typography>
-        ))}
+const Header = () => {
+  const navigate = useNavigate();
+  const { authData, setAuthData } = useAuth();
+
+  const onExit = () => {
+    setAuthData({});
+    navigate("/");
+  };
+
+  const avatarData = [authData.firstName, authData.lastName]
+    .map((str) => str && str[0])
+    .join(".");
+
+  return (
+    <Box component="header" sx={styles.wrapper}>
+      <Box className="container" sx={styles.content}>
+        <Box sx={styles.logoBox}>
+          <Logo />
+          <Typography variant="h1" children="Study with KPI" />
+        </Box>
+        {authData.id && (
+          <>
+            <Box sx={styles.menuItems}>
+              {menuItems.map(({ url, text }) => (
+                <Typography key={url} variant="body1">
+                  <NavLink to={url} children={text} />
+                </Typography>
+              ))}
+            </Box>
+            <Box display="flex">
+              <Avatar sx={styles.avatar}>
+                <Typography variant="button" children={avatarData} />
+              </Avatar>
+              <Box ml={2}>
+                <StyledButton
+                  disableRipple
+                  variant="text"
+                  startIcon={<Login />}
+                  text="Вийти"
+                  colorVariant="transparent"
+                  onClick={onExit}
+                />
+              </Box>
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default Header;

@@ -2,6 +2,7 @@ import { Box, Divider, Paper, Typography } from "@mui/material";
 import StyledButton from "../UI/StyledButton";
 import Pencil from "../../icons/Pencil";
 import { useModalState } from "../modalWindow/ModalContext";
+import { useAuth } from "../../AuthContext";
 
 const styles = {
   authorizationBlock: {
@@ -38,6 +39,11 @@ const styles = {
 
 const AuthInfoBlock = () => {
   const { toggleModal } = useModalState();
+  const { authData } = useAuth();
+
+  if (authData.id) {
+    return null;
+  }
 
   return (
     <Paper sx={styles.authorizationBlock} elevation={0}>
@@ -57,6 +63,7 @@ const AuthInfoBlock = () => {
           children="Заповни поля у віконці реєстрації і працюй на повну!"
           gutterBottom
         />
+
         <StyledButton
           disableRipple
           variant="text"
