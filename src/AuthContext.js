@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const initialData = {
   id: null,
@@ -12,6 +12,18 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthState = ({ children }) => {
   const [authData, setAuthData] = useState(initialData);
+
+  useEffect(() => {
+    if (!window) {
+      return;
+    }
+
+    const dataFromStorage = sessionStorage.getItem("login");
+
+    if (dataFromStorage) {
+      setAuthData(JSON.parse(dataFromStorage));
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ authData, setAuthData }}>

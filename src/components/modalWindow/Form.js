@@ -41,6 +41,8 @@ const styles = {
   },
 };
 
+const fakeApiData = { id: 1, firstName: "Ivan", lastName: "Daun" };
+
 const Form = () => {
   const { setAuthData } = useAuth();
   const { toggleModal } = useModalState();
@@ -64,9 +66,10 @@ const Form = () => {
     }
 
     // TODO: extend with API call
-    Promise.resolve({ id: 1, firstName: "Ivan", lastName: "Daun" })
+    Promise.resolve(fakeApiData)
       .then((res) => {
         setAuthData(res);
+        sessionStorage.setItem("login", JSON.stringify(fakeApiData));
       })
       .then(() => {
         toggleModal();
