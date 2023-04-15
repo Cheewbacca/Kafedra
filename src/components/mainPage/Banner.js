@@ -2,6 +2,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import StyledButton from "../UI/StyledButton";
 import Login from "../../icons/Login";
 import { useModalState } from "../modalWindow/ModalContext";
+import { useAuth } from "../../AuthContext";
 
 const styles = {
   banner: {
@@ -27,6 +28,7 @@ const styles = {
 
 const Banner = () => {
   const { toggleModal } = useModalState();
+  const { authData } = useAuth();
 
   return (
     <Paper sx={styles.banner} elevation={0}>
@@ -46,14 +48,16 @@ const Banner = () => {
           children="Сайт від учнів для учнів та вчителів."
         />
       </Box>
-      <StyledButton
-        sx={styles.mt50}
-        startIcon={<Login />}
-        variant="contained"
-        text="Увійти"
-        colorVariant="white"
-        onClick={toggleModal}
-      />
+      {!authData.id && (
+        <StyledButton
+          sx={styles.mt50}
+          startIcon={<Login />}
+          variant="contained"
+          text="Увійти"
+          colorVariant="white"
+          onClick={toggleModal}
+        />
+      )}
     </Paper>
   );
 };

@@ -57,6 +57,17 @@ const colorVariants = {
       backgroundColor: "#F5F5F5",
     },
   },
+  transparent: {
+    backgroundColor: "white",
+    color: "secondary.main",
+    borderColor: "secondary.main",
+    border: "2px solid",
+    transition: "color .3s borderColor .3s",
+    "&:hover": {
+      borderColor: "primary.main",
+      color: "primary.main",
+    },
+  },
 };
 
 const StyledButton = ({
