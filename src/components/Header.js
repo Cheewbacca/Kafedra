@@ -62,6 +62,7 @@ const Header = () => {
   const onExit = () => {
     setAuthData({});
     navigate("/");
+    sessionStorage.removeItem("login");
   };
 
   const avatarData = [authData.firstName, authData.lastName]
