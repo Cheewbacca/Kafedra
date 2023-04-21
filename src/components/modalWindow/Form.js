@@ -41,7 +41,14 @@ const styles = {
   },
 };
 
-const fakeApiData = { id: 1, firstName: "Ivan", lastName: "Daun" };
+const fakeApiData = {
+  id: 1,
+  firstName: "Дмитро",
+  lastName: "Ланде",
+  fatherName: "Володимирович",
+  role: "student",
+  group: "ФБ-95",
+};
 
 const Form = () => {
   const { setAuthData } = useAuth();

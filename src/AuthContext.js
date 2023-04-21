@@ -4,6 +4,9 @@ const initialData = {
   id: null,
   firstName: "",
   lastName: "",
+  fatherName: "",
+  role: "",
+  group: "",
 };
 
 const AuthContext = createContext(initialData);

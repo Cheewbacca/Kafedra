@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import StyledButton from "./UI/StyledButton";
 import Login from "../icons/Login";
+import ScheduleButton from "./schedule/ScheduleButton";
 
 const styles = {
   wrapper: {
@@ -79,9 +80,13 @@ const Header = () => {
         {authData.id && (
           <>
             <Box sx={styles.menuItems}>
-              {menuItems.map(({ url, text }) => (
+              {menuItems.map(({ url, text }, index) => (
                 <Typography key={url} variant="body1">
-                  <NavLink to={url} children={text} />
+                  {index === menuItems.length - 1 ? (
+                    <ScheduleButton text={text} />
+                  ) : (
+                    <NavLink to={url} children={text} />
+                  )}
                 </Typography>
               ))}
             </Box>
