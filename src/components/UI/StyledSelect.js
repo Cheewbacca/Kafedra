@@ -1,4 +1,5 @@
 import { MenuItem, Select } from "@mui/material";
+import { memo } from "react";
 
 const styles = {
   wrapper: {
@@ -33,4 +34,4 @@ const StyledSelect = ({ value, onChange, options, id, name }) => (
   </Select>
 );
 
-export default StyledSelect;
+export default memo(StyledSelect);

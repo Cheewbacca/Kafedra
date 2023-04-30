@@ -6,6 +6,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useAuth } from "../../AuthContext";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const styles = {
   icon: {
@@ -14,8 +16,23 @@ const styles = {
   },
 };
 
-const StyledTableRow = ({ item }) => {
+const StyledTableRow = ({ item, onView, onEdit }) => {
+  const location = useLocation();
+
+  const pagePaths = location.pathname.split("/");
+
+  const currentPage = pagePaths[pagePaths.length - 1];
+
+  const [searchParams] = useSearchParams();
+
+  const table = searchParams.get("table");
+
   const cells = Object.values(item);
+
+  const { authData } = useAuth();
+  const { role = "student" } = authData;
+
+  const removeActions = role === "student" && table !== "current";
 
   return (
     <TableRow>
@@ -27,12 +44,26 @@ const StyledTableRow = ({ item }) => {
           />
         </TableCell>
       ))}
-      <TableCell>
-        <Box display="flex">
-          <IconButton sx={styles.icon} children={<Edit />} />
-          <IconButton sx={[styles.icon, { ml: 3 }]} children={<FindInPage />} />
-        </Box>
-      </TableCell>
+      {!removeActions && (
+        <TableCell>
+          <Box display="flex">
+            {role === "teacher" && currentPage !== "control" && (
+              <IconButton
+                sx={styles.icon}
+                onClick={onEdit}
+                children={<Edit />}
+              />
+            )}
+            {currentPage === "control" && (
+              <IconButton
+                onClick={onView}
+                sx={[styles.icon, { ml: 3 }]}
+                children={<FindInPage />}
+              />
+            )}
+          </Box>
+        </TableCell>
+      )}
     </TableRow>
   );
 };

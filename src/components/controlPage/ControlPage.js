@@ -1,54 +1,83 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import StyledSelect from "../UI/StyledSelect";
 import { Box } from "@mui/material";
 import StyledTable from "../UI/StyledTable";
 import controlPageSelectOptions from "../../mocks/controlPageSelectOptions.json";
 import headerItems from "./headerItems";
+import { useAuth } from "../../AuthContext";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const items = [
   {
     name: "Історія Великого Всесвіту та шось там ще",
     teacher: "Петренко В.О.",
-    mark: "12",
   },
   {
     name: "Історія Великого Всесвіту та шось там ще",
     teacher: "Петренко В.О.",
-    mark: "12",
   },
   {
     name: "Історія Великого Всесвіту та шось там ще",
     teacher: "Петренко В.О.",
-    mark: "12",
   },
   {
     name: "Історія Великого Всесвіту та шось там ще",
     teacher: "Петренко В.О.",
-    mark: "12",
   },
   {
     name: "Історія Великого Всесвіту та шось там ще",
     teacher: "Петренко В.О.",
-    mark: "12",
   },
 ];
 
-const ControlPage = () => {
-  const [selectValue, setSelectValue] = useState(
-    controlPageSelectOptions[0].value
-  );
+const ControlPage = ({ variant }) => {
+  const {
+    authData: { role = "student" },
+  } = useAuth();
 
-  const changeSelect = (e) => {
-    setSelectValue(e.target.value);
-  };
+  const navigate = useNavigate();
 
-  const headerItemsToShow = useMemo(() => {
-    if (selectValue === "session") {
-      return headerItems;
+  const [searchParams] = useSearchParams();
+
+  const table = searchParams.get("table");
+
+  const [selectValue, setSelectValue] = useState("");
+
+  const [currentTable, setCurrentTable] = useState("all");
+
+  useEffect(() => {
+    if (!variant) {
+      setCurrentTable("all");
+      return;
     }
 
-    return headerItems.filter(({ show }) => Boolean(show));
-  }, [selectValue]);
+    if (variant === "details") {
+      setCurrentTable("one");
+      return;
+    }
+
+    setCurrentTable("additional");
+  }, [variant]);
+
+  useEffect(() => {
+    setSelectValue(table || controlPageSelectOptions[0].value);
+  }, [table]);
+
+  const changeSelect = (e) => {
+    navigate(`/control?table=${e.target.value}`);
+  };
+
+  const onView = () => {
+    navigate("/control/details");
+  };
+
+  const onEdit = () => {
+    navigate("/control/details/edit");
+  };
+
+  const headerItemsToShow =
+    headerItems[selectValue]?.[role]?.[currentTable] || [];
 
   return (
     <>
@@ -60,7 +89,12 @@ const ControlPage = () => {
         name="control_select"
       />
       <Box mt={3}>
-        <StyledTable headerItems={headerItemsToShow} items={items} />
+        <StyledTable
+          headerItems={headerItemsToShow}
+          items={items}
+          onView={onView}
+          onEdit={onEdit}
+        />
       </Box>
     </>
   );

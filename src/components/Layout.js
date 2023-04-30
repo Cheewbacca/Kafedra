@@ -12,6 +12,14 @@ const Layout = () => (
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/control" element={<ControlPage />} />
+        <Route
+          path="/control/details"
+          element={<ControlPage variant="details" />}
+        />
+        <Route
+          path="/control/details/edit"
+          element={<ControlPage variant="edit" />}
+        />
       </Routes>
     </Box>
     <Box className="footer">

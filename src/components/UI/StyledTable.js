@@ -42,28 +42,35 @@ const styles = {
   },
 };
 
-const StyledTable = ({ headerItems, items }) => (
-  <TableContainer component={Paper} sx={styles.wrapper}>
-    <Table>
-      <TableHead sx={styles.head}>
-        <TableRow>
-          {headerItems.map(({ Icon, text }, index) => (
-            <TableCell key={index} sx={styles.cell} scope="row">
-              <Box sx={styles.cellContent}>
-                <Icon />
-                <Typography variant="button" children={text} />
-              </Box>
-            </TableCell>
+const StyledTable = ({ headerItems, items, onView, onEdit }) => {
+  return (
+    <TableContainer component={Paper} sx={styles.wrapper}>
+      <Table>
+        <TableHead sx={styles.head}>
+          <TableRow>
+            {headerItems.map(({ Icon, text }, index) => (
+              <TableCell key={index} sx={styles.cell} scope="row">
+                <Box sx={styles.cellContent}>
+                  <Icon />
+                  <Typography variant="button" children={text} />
+                </Box>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items.map((item, index) => (
+            <StyledTableRow
+              key={index}
+              item={item}
+              onView={onView}
+              onEdit={onEdit}
+            />
           ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {items.map((item, index) => (
-          <StyledTableRow key={index} item={item} />
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
 export default StyledTable;
