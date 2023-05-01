@@ -1,6 +1,5 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import Logo from "../icons/Logo";
-import menuItems from "../mocks/headerMenuItems.json";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import StyledButton from "./UI/StyledButton";
@@ -59,6 +58,23 @@ const styles = {
 const Header = () => {
   const navigate = useNavigate();
   const { authData, setAuthData } = useAuth();
+
+  const { role = "student" } = authData;
+
+  const menuItems = [
+    {
+      url: role === "student" ? "/student/control" : "/teacher/control",
+      text: "Поточний контроль",
+    },
+    {
+      url: "/documents",
+      text: "Нормативні документи",
+    },
+    {
+      url: "/schedule",
+      text: "Розклад",
+    },
+  ];
 
   const onExit = () => {
     setAuthData({});

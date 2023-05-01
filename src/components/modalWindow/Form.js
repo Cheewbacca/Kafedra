@@ -46,7 +46,7 @@ const fakeApiData = {
   firstName: "Дмитро",
   lastName: "Ланде",
   fatherName: "Володимирович",
-  role: "student",
+  role: "teacher",
   group: "ФБ-95",
 };
 

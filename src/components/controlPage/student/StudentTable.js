@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import StyledTableRow from "./StyledTableRow";
+import StudentTableRow from "./StudentTableRow";
 
 const styles = {
   wrapper: {
@@ -42,7 +42,7 @@ const styles = {
   },
 };
 
-const StyledTable = ({ headerItems, items, onView, onEdit }) => {
+const StudentTable = ({ headerItems, items, onView }) => {
   return (
     <TableContainer component={Paper} sx={styles.wrapper}>
       <Table>
@@ -60,12 +60,7 @@ const StyledTable = ({ headerItems, items, onView, onEdit }) => {
         </TableHead>
         <TableBody>
           {items.map((item, index) => (
-            <StyledTableRow
-              key={index}
-              item={item}
-              onView={onView}
-              onEdit={onEdit}
-            />
+            <StudentTableRow key={index} item={item} onView={onView} />
           ))}
         </TableBody>
       </Table>
@@ -73,4 +68,4 @@ const StyledTable = ({ headerItems, items, onView, onEdit }) => {
   );
 };
 
-export default StyledTable;
+export default StudentTable;
