@@ -10,7 +10,7 @@ import StudentTable from "./student/StudentTable";
 
 const StudentControlPage = ({ variant }) => {
   const {
-    authData: { role = "student" },
+    authData: { role = "student", id },
   } = useAuth();
 
   const navigate = useNavigate();
@@ -25,10 +25,17 @@ const StudentControlPage = ({ variant }) => {
 
   const [tableItems, setTableItems] = useState([]);
 
-  // TODO: fetch
   useEffect(() => {
-    setTableItems([{ name: "hello", teacher: "world" }]);
-  }, []);
+    if (!id) {
+      return;
+    }
+
+    fetch(`http://localhost:3001/student/control?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTableItems(data);
+      });
+  }, [id]);
 
   useEffect(() => {
     if (variant === "details") {
