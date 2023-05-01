@@ -41,14 +41,14 @@ const styles = {
   },
 };
 
-const fakeApiData = {
-  id: 1,
-  firstName: "Дмитро",
-  lastName: "Ланде",
-  fatherName: "Володимирович",
-  role: "teacher",
-  group: "ФБ-95",
-};
+const prepareUserData = (userFromApi) => ({
+  group: userFromApi.group_name,
+  firstName: userFromApi.name,
+  lastName: userFromApi.surname,
+  fatherName: userFromApi.patronymic,
+  role: userFromApi.role_name,
+  id: userFromApi.id,
+});
 
 const Form = () => {
   const { setAuthData } = useAuth();
@@ -72,11 +72,26 @@ const Form = () => {
       return;
     }
 
-    // TODO: extend with API call
-    Promise.resolve(fakeApiData)
+    fetch("http://localhost:3001/login", {
+      method: "POST",
+      body: JSON.stringify({ login, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
       .then((res) => {
-        setAuthData(res);
-        sessionStorage.setItem("login", JSON.stringify(fakeApiData));
+        const user = res?.data;
+
+        if (!user) {
+          alert("Error");
+          return;
+        }
+
+        const preparedUser = prepareUserData(user);
+
+        setAuthData(preparedUser);
+        sessionStorage.setItem("login", JSON.stringify(preparedUser));
       })
       .then(() => {
         toggleModal();
