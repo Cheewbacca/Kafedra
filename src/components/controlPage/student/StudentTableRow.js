@@ -1,4 +1,4 @@
-import { Edit, FindInPage } from "@mui/icons-material";
+import { FindInPage } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -6,7 +6,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useAuth } from "../../AuthContext";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 const styles = {
@@ -16,7 +15,7 @@ const styles = {
   },
 };
 
-const StyledTableRow = ({ item, onView, onEdit }) => {
+const StudentTableRow = ({ item, onView }) => {
   const location = useLocation();
 
   const pagePaths = location.pathname.split("/");
@@ -29,10 +28,7 @@ const StyledTableRow = ({ item, onView, onEdit }) => {
 
   const cells = Object.values(item);
 
-  const { authData } = useAuth();
-  const { role = "student" } = authData;
-
-  const removeActions = role === "student" && table !== "current";
+  const removeActions = table !== "current" && table;
 
   return (
     <TableRow>
@@ -47,13 +43,6 @@ const StyledTableRow = ({ item, onView, onEdit }) => {
       {!removeActions && (
         <TableCell>
           <Box display="flex">
-            {role === "teacher" && currentPage !== "control" && (
-              <IconButton
-                sx={styles.icon}
-                onClick={onEdit}
-                children={<Edit />}
-              />
-            )}
             {currentPage === "control" && (
               <IconButton
                 onClick={onView}
@@ -68,4 +57,4 @@ const StyledTableRow = ({ item, onView, onEdit }) => {
   );
 };
 
-export default StyledTableRow;
+export default StudentTableRow;

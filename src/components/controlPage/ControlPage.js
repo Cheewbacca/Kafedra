@@ -1,37 +1,19 @@
 import { useState } from "react";
-import StyledSelect from "../UI/StyledSelect";
-import { Box } from "@mui/material";
-import StyledTable from "../UI/StyledTable";
 import controlPageSelectOptions from "../../mocks/controlPageSelectOptions.json";
-import headerItems from "./headerItems";
 import { useAuth } from "../../AuthContext";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import TeacherCurrentControl from "./teacher/TeacherCurrentControl";
+import StyledSelect from "../UI/StyledSelect";
+import { Box } from "@mui/material";
 
-const items = [
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-];
+const tables = {
+  current: <TeacherCurrentControl />,
+  calendar: <TeacherCurrentControl variant="calendar" />,
+  session: <TeacherCurrentControl variant="session" />,
+};
 
-const ControlPage = ({ variant }) => {
+const ControlPage = () => {
   const {
     authData: { role = "student" },
   } = useAuth();
@@ -42,42 +24,19 @@ const ControlPage = ({ variant }) => {
 
   const table = searchParams.get("table");
 
-  const [selectValue, setSelectValue] = useState("");
-
-  const [currentTable, setCurrentTable] = useState("all");
-
-  useEffect(() => {
-    if (!variant) {
-      setCurrentTable("all");
-      return;
-    }
-
-    if (variant === "details") {
-      setCurrentTable("one");
-      return;
-    }
-
-    setCurrentTable("additional");
-  }, [variant]);
+  const [selectValue, setSelectValue] = useState("current");
 
   useEffect(() => {
     setSelectValue(table || controlPageSelectOptions[0].value);
   }, [table]);
 
+  if (role !== "teacher") {
+    return null;
+  }
+
   const changeSelect = (e) => {
-    navigate(`/control?table=${e.target.value}`);
+    navigate(`/teacher/control?table=${e.target.value}`);
   };
-
-  const onView = () => {
-    navigate("/control/details");
-  };
-
-  const onEdit = () => {
-    navigate("/control/details/edit");
-  };
-
-  const headerItemsToShow =
-    headerItems[selectValue]?.[role]?.[currentTable] || [];
 
   return (
     <>
@@ -88,14 +47,7 @@ const ControlPage = ({ variant }) => {
         id="control_select"
         name="control_select"
       />
-      <Box mt={3}>
-        <StyledTable
-          headerItems={headerItemsToShow}
-          items={items}
-          onView={onView}
-          onEdit={onEdit}
-        />
-      </Box>
+      <Box mt={3}>{tables[selectValue]}</Box>
     </>
   );
 };

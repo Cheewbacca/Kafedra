@@ -4,6 +4,11 @@ import Header from "./Header";
 import Footer from "./Footer";
 import MainPage from "./mainPage/MainPage";
 import ControlPage from "./controlPage/ControlPage";
+import StudentControlPage from "./controlPage/StudentControlPage";
+import TeacherControlDetails from "./controlPage/teacher/TeacherControlDetails";
+import TeacherControlEdit from "./controlPage/teacher/TeacherControlEdit";
+import TeacherCalendar from "./controlPage/teacher/TeacherCalendar";
+import TeacherSession from "./controlPage/teacher/TeacherSession";
 
 const Layout = () => (
   <>
@@ -11,14 +16,27 @@ const Layout = () => (
     <Box component="main" className="container" mt={3}>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/control" element={<ControlPage />} />
+        <Route path="/student/control" element={<StudentControlPage />} />
         <Route
-          path="/control/details"
-          element={<ControlPage variant="details" />}
+          path="/student/control/details"
+          element={<StudentControlPage variant="details" />}
+        />
+        <Route path="/teacher/control" element={<ControlPage />} />
+        <Route
+          path="/teacher/control/detailsControl"
+          element={<TeacherControlDetails />}
         />
         <Route
-          path="/control/details/edit"
-          element={<ControlPage variant="edit" />}
+          path="/teacher/control/detailsControl/edit"
+          element={<TeacherControlEdit />}
+        />
+        <Route
+          path="/teacher/control/detailsCalendar"
+          element={<TeacherCalendar />}
+        />
+        <Route
+          path="/teacher/control/detailsSession"
+          element={<TeacherSession />}
         />
       </Routes>
     </Box>
