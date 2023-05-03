@@ -14,6 +14,8 @@ import StyledButton from "../../UI/StyledButton";
 import { Add } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import TeacherEditableTableRow from "./TeacherEditableTableRow";
+import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../../../AuthContext";
 
 const styles = {
   wrapper: {
@@ -46,84 +48,106 @@ const styles = {
   },
 };
 
-const itemsTest = [
-  {
-    name: "student",
-    date: "2023-05-01",
-    note: 12,
-    control: "practice",
-    id: 1,
-  },
-  {
-    name: "student",
-    date: "2023-05-01",
-    note: 12,
-    control: "practice",
-    id: 2,
-  },
-  {
-    name: "student",
-    date: "2023-05-01",
-    note: 12,
-    control: "practice",
-    id: 3,
-  },
-  {
-    name: "student",
-    date: "2023-05-01",
-    note: 12,
-    control: "practice",
-    id: 4,
-  },
-  {
-    name: "student",
-    date: "2023-05-01",
-    note: 12,
-    control: "practice",
-    id: 5,
-  },
-];
-
 const TeacherControlEdit = () => {
+  const {
+    authData: { id },
+  } = useAuth();
+
   const [items, setItems] = useState([]);
 
-  const studentName = items?.[0]?.name || "";
+  const studentName = items?.[0]?.student_name_surname || "";
+
+  const [searchParams] = useSearchParams();
+
+  const studentId = searchParams.get("id");
+  const subjectId = searchParams.get("subject");
 
   useEffect(() => {
-    setItems(itemsTest);
-  }, []);
+    if (!studentId) {
+      return;
+    }
 
-  const headerItemsToShow = headerItems?.current?.teacher?.additional || [];
+    fetch(`http://localhost:3001/educator/controlStudent?id=${studentId}`)
+      .then((res) => res.json())
+      .then(({ data }) => {
+        setItems(data);
+      });
+  }, [studentId]);
+
+  const headerItemsToShow = headerItems?.current?.educator?.additional || [];
 
   const onEdit = (itemToEdit) => {
-    setItems((prev) =>
-      prev.map((el) => (el.id === itemToEdit.id ? itemToEdit : el))
-    );
+    const urlParams = new URLSearchParams({
+      score: itemToEdit.score,
+      educator_id: +id,
+      id_math: itemToEdit.ID_math_score,
+    });
+
+    fetch(
+      `http://localhost:3001/educator/controlEdit?${urlParams.toString()}`,
+      {
+        method: "PUT",
+      }
+    ).then((res) => {
+      if (!res) {
+        alert("Error");
+        return;
+      }
+      setItems((prev) =>
+        prev.map((el) =>
+          el.ID_math_score === itemToEdit.ID_math_score ? itemToEdit : el
+        )
+      );
+    });
   };
 
   const onDelete = (deleteId) => {
-    setItems((prev) => prev.filter(({ id }) => id !== deleteId));
+    setItems((prev) =>
+      prev.filter(({ ID_math_score }) => ID_math_score !== deleteId)
+    );
   };
 
   const addItem = () => {
     setItems((prev) => [
       ...prev,
       {
-        name: studentName,
-        date: new Date().toDateString(),
-        note: null,
-        control: "practice",
-        id: new Date().getTime(),
+        student_name_surname: studentName,
+        score_date: new Date().toDateString(),
+        score: undefined,
+        type_of_control: "practic",
+        ID_math_score: new Date().getTime(),
         isNew: true,
       },
     ]);
   };
 
   const onCreate = (newItem) => {
-    setItems((prev) => [
-      ...prev.filter(({ id }) => id !== newItem.id),
-      newItem,
-    ]);
+    fetch("http://localhost:3001/educator/addScore", {
+      method: "POST",
+      body: JSON.stringify({
+        student_id: studentId,
+        score_date: newItem.score_date,
+        score: newItem.score,
+        type_of_control: newItem.type_of_control,
+        educator_id: id,
+        subject_id: subjectId,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status !== 200) {
+        alert("Error");
+        return;
+      }
+
+      setItems((prev) => [
+        ...prev.filter(
+          ({ ID_math_score }) => ID_math_score !== newItem.ID_math_score
+        ),
+        newItem,
+      ]);
+    });
   };
 
   return (
@@ -145,7 +169,7 @@ const TeacherControlEdit = () => {
           <TableBody>
             {items.map((item) => (
               <TeacherEditableTableRow
-                key={item.id}
+                key={item.ID_math_score}
                 item={item}
                 onEdit={onEdit}
                 onDelete={onDelete}

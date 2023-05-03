@@ -14,6 +14,7 @@ import headerItems from "../headerItems";
 import { useEffect, useState } from "react";
 import { Delete, Edit } from "@mui/icons-material";
 import StyledSelect from "../../UI/StyledSelect";
+import { useAuth } from "../../../AuthContext";
 
 const styles = {
   wrapper: {
@@ -45,44 +46,6 @@ const styles = {
     },
   },
 };
-
-const itemsTest = [
-  {
-    name: "student",
-    group: "TR-13",
-    atestation1: "+",
-    atestation2: "-",
-    id: 1,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    atestation1: "+",
-    atestation2: "-",
-    id: 2,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    atestation1: "+",
-    atestation2: "-",
-    id: 3,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    atestation1: "+",
-    atestation2: "-",
-    id: 4,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    atestation1: "+",
-    atestation2: "-",
-    id: 5,
-  },
-];
 
 const attestationOptions = [
   {
@@ -188,11 +151,23 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
 };
 
 const TeacherCalendar = () => {
+  const {
+    authData: { id },
+  } = useAuth();
+
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    setItems(itemsTest);
-  }, []);
+    if (!id) {
+      return;
+    }
+
+    fetch(`http://localhost:3001/educator/controlDetailed?id=${id}`)
+      .then((res) => res.json())
+      .then(({ data }) => {
+        setItems(data);
+      });
+  }, [id]);
 
   const headerItemsToShow = headerItems?.calendar?.teacher?.one || [];
 

@@ -166,7 +166,7 @@ const TeacherCalendar = () => {
     setItems(itemsTest);
   }, []);
 
-  const headerItemsToShow = headerItems?.session?.teacher?.one || [];
+  const headerItemsToShow = headerItems?.session?.educator?.one || [];
 
   const onEdit = (itemToEdit) => {
     setItems((prev) =>

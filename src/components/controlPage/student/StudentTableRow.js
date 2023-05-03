@@ -26,18 +26,17 @@ const StudentTableRow = ({ item, onView }) => {
 
   const table = searchParams.get("table");
 
-  const cells = Object.values(item);
+  const { resource_name, ...otherItems } = item;
+
+  const cells = Object.values(otherItems);
 
   const removeActions = table !== "current" && table;
 
   return (
     <TableRow>
       {cells.map((data, index) => (
-        <TableCell key={data}>
-          <Typography
-            sx={[index === cells.length - 1 && { color: "primary.main" }]}
-            children={data}
-          />
+        <TableCell key={index}>
+          <Typography children={data} />
         </TableCell>
       ))}
       {!removeActions && (
