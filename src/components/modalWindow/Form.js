@@ -72,7 +72,7 @@ const Form = () => {
       return;
     }
 
-    fetch("http://localhost:3001/login", {
+    fetch("/login", {
       method: "POST",
       body: JSON.stringify({ login, password }),
       headers: {

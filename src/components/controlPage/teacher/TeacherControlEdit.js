@@ -68,9 +68,7 @@ const TeacherControlEdit = () => {
       return;
     }
 
-    fetch(
-      `http://localhost:3001/educator/controlStudent?id=${studentId}&resource=${resource}`
-    )
+    fetch(`/educator/controlStudent?id=${studentId}&resource=${resource}`)
       .then((res) => res.json())
       .then(({ data }) => {
         setItems(data);
@@ -87,12 +85,9 @@ const TeacherControlEdit = () => {
       resource,
     });
 
-    fetch(
-      `http://localhost:3001/educator/controlEdit?${urlParams.toString()}`,
-      {
-        method: "PUT",
-      }
-    ).then((res) => {
+    fetch(`/educator/controlEdit?${urlParams.toString()}`, {
+      method: "PUT",
+    }).then((res) => {
       if (!res) {
         alert("Error");
         return;
@@ -126,7 +121,7 @@ const TeacherControlEdit = () => {
   };
 
   const onCreate = (newItem) => {
-    fetch("http://localhost:3001/educator/addScore", {
+    fetch("/educator/addScore", {
       method: "POST",
       body: JSON.stringify({
         student_id: studentId,

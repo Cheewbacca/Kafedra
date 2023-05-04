@@ -65,9 +65,7 @@ const TeacherControlDetails = () => {
       return;
     }
 
-    fetch(
-      `http://localhost:3001/educator/controlDetailed?id=${id}&resource=${resource}`
-    )
+    fetch(`/educator/controlDetailed?id=${id}&resource=${resource}`)
       .then((res) => res.json())
       .then(({ data }) => {
         if (!data) {

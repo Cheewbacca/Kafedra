@@ -33,7 +33,7 @@ const StudentControlPage = ({ variant }) => {
 
     if (!table || table === "current") {
       if (!variant) {
-        fetch(`http://localhost:3001/student/control?id=${id}`)
+        fetch(`/student/control?id=${id}`)
           .then((res) => res.json())
           .then(({ data }) => {
             setTableItems(data);
@@ -45,21 +45,19 @@ const StudentControlPage = ({ variant }) => {
         return;
       }
 
-      fetch(
-        `http://localhost:3001/student/controlDetailed?id=${id}&resource=${resourceFromApi}`
-      )
+      fetch(`/student/controlDetailed?id=${id}&resource=${resourceFromApi}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
         });
     } else if (table === "calendar") {
-      fetch(`http://localhost:3001/student/calendar?id=${id}`)
+      fetch(`/student/calendar?id=${id}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
         });
     } else {
-      fetch(`http://localhost:3001/student/session?id=${id}`)
+      fetch(`/student/session?id=${id}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);

@@ -172,9 +172,7 @@ const TeacherCalendar = () => {
       return;
     }
 
-    fetch(
-      `http://localhost:3001/educator/calendarDetailed?educator_id=${id}&group=${group}`
-    )
+    fetch(`/educator/calendarDetailed?educator_id=${id}&group=${group}`)
       .then((res) => res.json())
       .then(({ data }) => {
         setItems(data);
@@ -185,7 +183,7 @@ const TeacherCalendar = () => {
 
   const onEdit = (itemToEdit) => {
     fetch(
-      `http://localhost:3001/educator/updateCalendar?educator_id=${id}&note1="${encodeURIComponent(
+      `/educator/updateCalendar?educator_id=${id}&note1="${encodeURIComponent(
         itemToEdit.calendar_control_1
       )}"&note2="${encodeURIComponent(
         itemToEdit.calendar_control_2
