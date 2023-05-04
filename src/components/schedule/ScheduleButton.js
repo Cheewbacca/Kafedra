@@ -23,7 +23,7 @@ const ScheduleButton = ({ text }) => {
 
   const scheduleId = isStudent
     ? paths[role][group]
-    : paths[role][teacherFullName];
+    : paths?.[role]?.[teacherFullName];
 
   if (!scheduleId) {
     return null;

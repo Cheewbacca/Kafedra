@@ -73,7 +73,7 @@ const tablesHeaders = {
       all: [Name, Professor, Actions],
       one: [Date, Professor, Score, Control],
     },
-    teacher: {
+    educator: {
       all: [Name, Group, Actions],
       one: [Student, Group, Actions],
       additional: [Student, Date, Score, Control, Actions],
@@ -83,7 +83,7 @@ const tablesHeaders = {
     student: {
       all: [Name, Professor, Score, Date],
     },
-    teacher: {
+    educator: {
       all: [Name, Group, Actions],
       one: [Student, Group, Score, Actions],
     },
@@ -92,7 +92,7 @@ const tablesHeaders = {
     student: {
       all: [Name, Professor, Atestation1, Atestation2],
     },
-    teacher: {
+    educator: {
       all: [Name, Group, Actions],
       one: [Student, Group, Atestation1, Atestation2, Actions],
     },

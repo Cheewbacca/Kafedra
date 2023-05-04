@@ -14,8 +14,31 @@ const styles = {
   },
 };
 
-const TeacherTableRow = ({ item, onView, onEdit }) => {
-  const cells = Object.values(item);
+const TeacherTableRow = ({ item, onView, onEdit, variant }) => {
+  const { ID_subject, resource_name, student_id, ...otherItems } = item;
+
+  const cells = Object.values(otherItems);
+
+  const editItem = () => {
+    if (!student_id) {
+      return;
+    }
+
+    onEdit(student_id);
+  };
+
+  const viewItem = () => {
+    if (variant === "calendar" || variant === "session") {
+      onView(otherItems.group_name);
+      return;
+    }
+
+    if (!ID_subject) {
+      return;
+    }
+
+    onView(ID_subject, resource_name);
+  };
 
   return (
     <TableRow>
@@ -30,13 +53,13 @@ const TeacherTableRow = ({ item, onView, onEdit }) => {
             {onEdit && (
               <IconButton
                 sx={styles.icon}
-                onClick={onEdit}
+                onClick={editItem}
                 children={<Edit />}
               />
             )}
             {onView && (
               <IconButton
-                onClick={onView}
+                onClick={viewItem}
                 sx={[styles.icon, { ml: 3 }]}
                 children={<FindInPage />}
               />

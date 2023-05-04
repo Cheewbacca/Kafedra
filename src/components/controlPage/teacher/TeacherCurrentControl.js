@@ -5,32 +5,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import headerItems from "../headerItems";
 
-const items = [
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-];
-
 const TeacherCurrentControl = ({ variant }) => {
   const {
-    authData: { role = "student" },
+    authData: { role = "student", id },
   } = useAuth();
 
   const navigate = useNavigate();
@@ -38,33 +15,58 @@ const TeacherCurrentControl = ({ variant }) => {
   const [tableItems, setTableItems] = useState([]);
 
   useEffect(() => {
-    setTableItems(items);
-  }, []);
+    if (!id) {
+      return;
+    }
 
-  if (role !== "teacher") {
+    if (!variant || variant === "current") {
+      fetch(`http://localhost:3001/educator/control?id=${id}`)
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    } else if (variant === "calendar") {
+      fetch(`http://localhost:3001/educator/calendarList?id=${id}`)
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    } else {
+      fetch(`http://localhost:3001/educator/sessionList?id=${id}`)
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    }
+  }, [id, variant]);
+
+  if (role !== "educator") {
     return null;
   }
 
-  const onView = () => {
+  const onView = (param, resource = "") => {
     if (variant === "calendar") {
-      navigate(`/teacher/control/detailsCalendar`);
+      navigate(`/teacher/control/detailsCalendar?group_name=${param}`);
       return;
     }
     if (variant === "session") {
-      navigate(`/teacher/control/detailsSession`);
+      navigate(`/teacher/control/detailsSession?group_name=${param}`);
       return;
     }
 
-    navigate(`/teacher/control/detailsControl`);
+    navigate(
+      `/teacher/control/detailsControl?subject=${param}&resource=${resource}`
+    );
   };
 
-  const headerItemsToShow = headerItems?.current?.teacher?.all || [];
+  const headerItemsToShow = headerItems?.current?.educator?.all || [];
 
   return (
     <StyledTable
       headerItems={headerItemsToShow}
       items={tableItems}
       onView={onView}
+      variant={variant}
     />
   );
 };

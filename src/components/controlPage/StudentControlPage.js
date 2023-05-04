@@ -18,6 +18,7 @@ const StudentControlPage = ({ variant }) => {
   const [searchParams] = useSearchParams();
 
   const table = searchParams.get("table");
+  const resourceFromApi = searchParams.get("resource");
 
   const [selectValue, setSelectValue] = useState("");
 
@@ -30,12 +31,41 @@ const StudentControlPage = ({ variant }) => {
       return;
     }
 
-    fetch(`http://localhost:3001/student/control?id=${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTableItems(data);
-      });
-  }, [id]);
+    if (!table || table === "current") {
+      if (!variant) {
+        fetch(`http://localhost:3001/student/control?id=${id}`)
+          .then((res) => res.json())
+          .then(({ data }) => {
+            setTableItems(data);
+          });
+        return;
+      }
+
+      if (!resourceFromApi) {
+        return;
+      }
+
+      fetch(
+        `http://localhost:3001/student/controlDetailed?id=${id}&resource=${resourceFromApi}`
+      )
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    } else if (table === "calendar") {
+      fetch(`http://localhost:3001/student/calendar?id=${id}`)
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    } else {
+      fetch(`http://localhost:3001/student/session?id=${id}`)
+        .then((res) => res.json())
+        .then(({ data }) => {
+          setTableItems(data);
+        });
+    }
+  }, [id, variant, table, resourceFromApi]);
 
   useEffect(() => {
     if (variant === "details") {
@@ -59,8 +89,11 @@ const StudentControlPage = ({ variant }) => {
     setCurrentTable("all");
   };
 
-  const onView = () => {
-    navigate("/student/control/details");
+  const onView = (resource) => {
+    if (!resource) {
+      return;
+    }
+    navigate(`/student/control/details?resource=${resource}`);
   };
 
   const headerItemsToShow =

@@ -26,18 +26,21 @@ const StudentTableRow = ({ item, onView }) => {
 
   const table = searchParams.get("table");
 
-  const cells = Object.values(item);
+  const { resource_name, ...otherItems } = item;
+
+  const cells = Object.values(otherItems);
 
   const removeActions = table !== "current" && table;
+
+  const viewTable = () => {
+    onView(resource_name);
+  };
 
   return (
     <TableRow>
       {cells.map((data, index) => (
-        <TableCell key={data}>
-          <Typography
-            sx={[index === cells.length - 1 && { color: "primary.main" }]}
-            children={data}
-          />
+        <TableCell key={index}>
+          <Typography children={data} />
         </TableCell>
       ))}
       {!removeActions && (
@@ -45,7 +48,7 @@ const StudentTableRow = ({ item, onView }) => {
           <Box display="flex">
             {currentPage === "control" && (
               <IconButton
-                onClick={onView}
+                onClick={viewTable}
                 sx={[styles.icon, { ml: 3 }]}
                 children={<FindInPage />}
               />

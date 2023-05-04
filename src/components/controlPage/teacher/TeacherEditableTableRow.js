@@ -23,7 +23,7 @@ const styles = {
 
 const options = [
   {
-    value: "practice",
+    value: "practic",
     text: "Практика",
   },
   {
@@ -38,22 +38,22 @@ const controlVariants = options.reduce(
 );
 
 const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
-  const { isNew = false, id, ...otherItems } = item;
+  const { isNew = false, ID_math_score: id, ...otherItems } = item;
 
   const [editable, setEditable] = useState(isNew);
 
-  const { date: initialDate, name } = otherItems;
+  const { score_date: initialDate, student_name_surname: name } = otherItems;
 
   const [date, setDate] = useState(dayjs(initialDate));
-  const [note, setNote] = useState(otherItems.note);
-  const [controlType, setControlType] = useState(otherItems.control);
+  const [note, setNote] = useState(otherItems.score);
+  const [controlType, setControlType] = useState(otherItems.type_of_control);
 
   const afterEditItem = {
-    name,
-    date: date.format("YYYY-MM-DD"),
-    note,
-    control: controlType,
-    id,
+    student_name_surname: name,
+    score_date: date.format("YYYY-MM-DD"),
+    score: note,
+    type_of_control: controlType || otherItems.type_of_control,
+    ID_math_score: id,
     isNew: false,
   };
 
@@ -70,7 +70,10 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
   };
 
   const deleteItem = () => {
-    onDelete(id);
+    if (isNew) {
+      onDelete(id);
+    }
+    setEditable(false);
   };
 
   const createItem = () => {
@@ -86,12 +89,12 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
     setNote(newNote);
   };
 
-  const changeControlType = (e) => {
-    setControlType(e.target.value);
-  };
-
   const changeDate = (newValue) => {
     setDate(newValue);
+  };
+
+  const changeControlType = (e) => {
+    setControlType(e.target.value);
   };
 
   const Content = () => {
@@ -99,7 +102,7 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
       return Object.entries(otherItems).map(([key, data]) => (
         <TableCell key={data}>
           <Typography
-            children={key === "control" ? controlVariants[data] : data}
+            children={key === "type_of_control" ? controlVariants[data] : data}
           />
         </TableCell>
       ));
@@ -124,11 +127,17 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
           />
         </TableCell>
         <TableCell>
-          <StyledSelect
-            value={controlType}
-            onChange={changeControlType}
-            options={options}
-          ></StyledSelect>
+          {isNew ? (
+            <StyledSelect
+              value={controlType}
+              onChange={changeControlType}
+              options={options}
+            ></StyledSelect>
+          ) : (
+            <Typography
+              children={controlVariants[otherItems.type_of_control]}
+            />
+          )}
         </TableCell>
       </>
     );

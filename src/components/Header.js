@@ -64,7 +64,7 @@ const Header = () => {
   const menuItems = [
     {
       url: role === "student" ? "/student/control" : "/teacher/control",
-      text: "Поточний контроль",
+      text: "Контроль",
     },
     {
       url: "/documents",

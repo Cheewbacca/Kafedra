@@ -31,12 +31,7 @@ const Footer = () => (
       </Box>
       <Box mt={3}>
         <Typography>
-          Non augue volutpat arcu netus elementum at lorem sed et. Tempor et
-          felis tincidunt in. Tempus amet consectetur morbi ornare cum. Viverra
-          dolor cursus nunc tristique amet mauris quam. Aliquam convallis
-          habitasse congue massa consectetur bibendum. Duis scelerisque
-          ullamcorper maecenas amet sapien nec. Lectus nunc et nullam proin
-          cras.
+          Даний прототип виконав Стурчак Максим для магістерської дисертації.
         </Typography>
       </Box>
     </Box>

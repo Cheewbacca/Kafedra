@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 import TeacherTableRow from "./TeacherTableRow";
 import headerItems from "../headerItems";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../AuthContext";
 
 const styles = {
   wrapper: {
@@ -44,35 +46,44 @@ const styles = {
   },
 };
 
-const items = [
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-  {
-    name: "Історія Великого Всесвіту та шось там ще",
-    teacher: "Петренко В.О.",
-  },
-];
-
 const TeacherControlDetails = () => {
   const navigate = useNavigate();
-  const headerItemsToShow = headerItems?.current?.teacher?.one || [];
 
-  const onEdit = () => {
-    navigate("/teacher/control/detailsControl/edit");
+  const {
+    authData: { id },
+  } = useAuth();
+
+  const [items, setItems] = useState([]);
+
+  const [searchParams] = useSearchParams();
+
+  const subjectId = searchParams.get("subject");
+  const resource = searchParams.get("resource");
+
+  useEffect(() => {
+    if (!id || !resource) {
+      return;
+    }
+
+    fetch(
+      `http://localhost:3001/educator/controlDetailed?id=${id}&resource=${resource}`
+    )
+      .then((res) => res.json())
+      .then(({ data }) => {
+        if (!data) {
+          alert("Invalid permissions!");
+          return;
+        }
+        setItems(data);
+      });
+  }, [id, resource]);
+
+  const headerItemsToShow = headerItems?.current?.educator?.one || [];
+
+  const onEdit = (id) => {
+    navigate(
+      `/teacher/control/detailsControl/edit?id=${id}&subject=${subjectId}&resource=${resource}`
+    );
   };
 
   return (
