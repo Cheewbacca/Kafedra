@@ -145,9 +145,7 @@ const TeacherCalendar = () => {
       return;
     }
 
-    fetch(
-      `http://localhost:3001/educator/sessionsGroup?group=${group}&educator_id=${id}`
-    )
+    fetch(`/educator/sessionsGroup?group=${group}&educator_id=${id}`)
       .then((res) => res.json())
       .then(({ data }) => {
         setItems(data);
@@ -158,7 +156,7 @@ const TeacherCalendar = () => {
 
   const onEdit = (itemToEdit) => {
     fetch(
-      `http://localhost:3001/educator/updateSession?score=${itemToEdit.score}&educator_id=${id}&student_id=${itemToEdit.ID_student_exam}`,
+      `/educator/updateSession?score=${itemToEdit.score}&educator_id=${id}&student_id=${itemToEdit.ID_student_exam}`,
       {
         method: "PUT",
       }

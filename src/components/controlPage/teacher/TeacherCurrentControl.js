@@ -20,19 +20,19 @@ const TeacherCurrentControl = ({ variant }) => {
     }
 
     if (!variant || variant === "current") {
-      fetch(`http://localhost:3001/educator/control?id=${id}`)
+      fetch(`/educator/control?id=${id}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
         });
     } else if (variant === "calendar") {
-      fetch(`http://localhost:3001/educator/calendarList?id=${id}`)
+      fetch(`/educator/calendarList?id=${id}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
         });
     } else {
-      fetch(`http://localhost:3001/educator/sessionList?id=${id}`)
+      fetch(`/educator/sessionList?id=${id}`)
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
