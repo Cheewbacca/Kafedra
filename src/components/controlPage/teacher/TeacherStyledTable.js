@@ -42,7 +42,7 @@ const styles = {
   },
 };
 
-const TeacherStyledTable = ({ headerItems, items, onView }) => {
+const TeacherStyledTable = ({ headerItems, items, onView, variant }) => {
   return (
     <TableContainer component={Paper} sx={styles.wrapper}>
       <Table>
@@ -60,7 +60,12 @@ const TeacherStyledTable = ({ headerItems, items, onView }) => {
         </TableHead>
         <TableBody>
           {items.map((item, index) => (
-            <TeacherTableRow key={index} item={item} onView={onView} />
+            <TeacherTableRow
+              key={index}
+              item={item}
+              onView={onView}
+              variant={variant}
+            />
           ))}
         </TableBody>
       </Table>

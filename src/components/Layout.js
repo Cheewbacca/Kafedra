@@ -13,32 +13,34 @@ import TeacherSession from "./controlPage/teacher/TeacherSession";
 const Layout = () => (
   <>
     <Header />
-    <Box component="main" className="container" mt={3}>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/student/control" element={<StudentControlPage />} />
-        <Route
-          path="/student/control/details"
-          element={<StudentControlPage variant="details" />}
-        />
-        <Route path="/teacher/control" element={<ControlPage />} />
-        <Route
-          path="/teacher/control/detailsControl"
-          element={<TeacherControlDetails />}
-        />
-        <Route
-          path="/teacher/control/detailsControl/edit"
-          element={<TeacherControlEdit />}
-        />
-        <Route
-          path="/teacher/control/detailsCalendar"
-          element={<TeacherCalendar />}
-        />
-        <Route
-          path="/teacher/control/detailsSession"
-          element={<TeacherSession />}
-        />
-      </Routes>
+    <Box component="main" mt={3}>
+      <Box className="container">
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/student/control" element={<StudentControlPage />} />
+          <Route
+            path="/student/control/details"
+            element={<StudentControlPage variant="details" />}
+          />
+          <Route path="/teacher/control" element={<ControlPage />} />
+          <Route
+            path="/teacher/control/detailsControl"
+            element={<TeacherControlDetails />}
+          />
+          <Route
+            path="/teacher/control/detailsControl/edit"
+            element={<TeacherControlEdit />}
+          />
+          <Route
+            path="/teacher/control/detailsCalendar"
+            element={<TeacherCalendar />}
+          />
+          <Route
+            path="/teacher/control/detailsSession"
+            element={<TeacherSession />}
+          />
+        </Routes>
+      </Box>
     </Box>
     <Box className="footer">
       <Box mt={6}>

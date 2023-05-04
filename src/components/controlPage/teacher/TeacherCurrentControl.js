@@ -44,17 +44,19 @@ const TeacherCurrentControl = ({ variant }) => {
     return null;
   }
 
-  const onView = (subjectId) => {
+  const onView = (param, resource = "") => {
     if (variant === "calendar") {
-      navigate(`/teacher/control/detailsCalendar`);
+      navigate(`/teacher/control/detailsCalendar?group_name=${param}`);
       return;
     }
     if (variant === "session") {
-      navigate(`/teacher/control/detailsSession`);
+      navigate(`/teacher/control/detailsSession?group_name=${param}`);
       return;
     }
 
-    navigate(`/teacher/control/detailsControl?subject=${subjectId}`);
+    navigate(
+      `/teacher/control/detailsControl?subject=${param}&resource=${resource}`
+    );
   };
 
   const headerItemsToShow = headerItems?.current?.educator?.all || [];
@@ -64,6 +66,7 @@ const TeacherCurrentControl = ({ variant }) => {
       headerItems={headerItemsToShow}
       items={tableItems}
       onView={onView}
+      variant={variant}
     />
   );
 };

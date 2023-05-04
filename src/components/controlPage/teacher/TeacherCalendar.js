@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Delete, Edit } from "@mui/icons-material";
 import StyledSelect from "../../UI/StyledSelect";
 import { useAuth } from "../../../AuthContext";
+import { useSearchParams } from "react-router-dom";
 
 const styles = {
   wrapper: {
@@ -58,10 +59,15 @@ const attestationOptions = [
   },
 ];
 
-const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
-  const { id, ...otherItems } = item;
-  const [firstAttestation, setFirstAttestation] = useState(item.atestation1);
-  const [secondAttestation, setSecondAttestation] = useState(item.atestation2);
+const EditableCalendarRow = ({ item, onEdit }) => {
+  const { ID_control: id, ...otherItems } = item;
+
+  const [firstAttestation, setFirstAttestation] = useState(
+    item.calendar_control_1
+  );
+  const [secondAttestation, setSecondAttestation] = useState(
+    item.calendar_control_2
+  );
 
   const changeAttestation1 = (e) => {
     setFirstAttestation(e.target.value);
@@ -81,13 +87,13 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
     setEditable(false);
     onEdit({
       ...item,
-      atestation1: firstAttestation,
-      atestation2: secondAttestation,
+      calendar_control_1: firstAttestation,
+      calendar_control_2: secondAttestation,
     });
   };
 
   const deleteItem = () => {
-    onDelete(id);
+    setEditable(false);
   };
 
   const Content = () => {
@@ -99,7 +105,7 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
       ));
     }
 
-    const { name, group } = otherItems;
+    const { student_name_surname: name, group_name: group } = otherItems;
 
     return (
       <>
@@ -157,28 +163,48 @@ const TeacherCalendar = () => {
 
   const [items, setItems] = useState([]);
 
+  const [searchParams] = useSearchParams();
+
+  const group = searchParams.get("group_name");
+
   useEffect(() => {
-    if (!id) {
+    if (!id || !group) {
       return;
     }
 
-    fetch(`http://localhost:3001/educator/controlDetailed?id=${id}`)
+    fetch(
+      `http://localhost:3001/educator/calendarDetailed?educator_id=${id}&group=${group}`
+    )
       .then((res) => res.json())
       .then(({ data }) => {
         setItems(data);
       });
-  }, [id]);
+  }, [id, group]);
 
-  const headerItemsToShow = headerItems?.calendar?.teacher?.one || [];
+  const headerItemsToShow = headerItems?.calendar?.educator?.one || [];
 
   const onEdit = (itemToEdit) => {
-    setItems((prev) =>
-      prev.map((el) => (el.id === itemToEdit.id ? itemToEdit : el))
-    );
-  };
+    fetch(
+      `http://localhost:3001/educator/updateCalendar?educator_id=${id}&note1="${encodeURIComponent(
+        itemToEdit.calendar_control_1
+      )}"&note2="${encodeURIComponent(
+        itemToEdit.calendar_control_2
+      )}"&control_id=${itemToEdit.ID_control}`,
+      {
+        method: "PUT",
+      }
+    ).then((res) => {
+      if (!res) {
+        alert("Error");
+        return;
+      }
 
-  const onDelete = (deleteId) => {
-    setItems((prev) => prev.filter(({ id }) => id !== deleteId));
+      setItems((prev) =>
+        prev.map((el) =>
+          el.ID_control === itemToEdit.ID_control ? itemToEdit : el
+        )
+      );
+    });
   };
 
   return (
@@ -198,12 +224,7 @@ const TeacherCalendar = () => {
         </TableHead>
         <TableBody>
           {items.map((item) => (
-            <EditableCalendarRow
-              key={item.id}
-              item={item}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
+            <EditableCalendarRow key={item.id} item={item} onEdit={onEdit} />
           ))}
         </TableBody>
       </Table>

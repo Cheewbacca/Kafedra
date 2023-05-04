@@ -14,6 +14,8 @@ import {
 import headerItems from "../headerItems";
 import { useEffect, useState } from "react";
 import { Delete, Edit } from "@mui/icons-material";
+import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../../../AuthContext";
 
 const styles = {
   wrapper: {
@@ -46,42 +48,10 @@ const styles = {
   },
 };
 
-const itemsTest = [
-  {
-    name: "student",
-    group: "TR-13",
-    note: "100",
-    id: 1,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    note: "100",
-    id: 2,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    note: "100",
-    id: 3,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    note: "100",
-    id: 4,
-  },
-  {
-    name: "student",
-    group: "TR-13",
-    note: "100",
-    id: 5,
-  },
-];
+const EditableCalendarRow = ({ item, onEdit }) => {
+  const { ID_student_exam: id, ...otherItems } = item;
 
-const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
-  const { id, ...otherItems } = item;
-  const [note, setNote] = useState(item.note);
+  const [note, setNote] = useState(item.score);
 
   const changeNote = (e) => {
     setNote(e.target.value);
@@ -97,12 +67,12 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
     setEditable(false);
     onEdit({
       ...item,
-      note,
+      score: note,
     });
   };
 
   const deleteItem = () => {
-    onDelete(id);
+    setEditable(false);
   };
 
   const Content = () => {
@@ -114,7 +84,7 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
       ));
     }
 
-    const { name, group } = otherItems;
+    const { student_name_surname: name, group_name: group } = otherItems;
 
     return (
       <>
@@ -160,22 +130,49 @@ const EditableCalendarRow = ({ item, onEdit, onDelete }) => {
 };
 
 const TeacherCalendar = () => {
+  const {
+    authData: { id },
+  } = useAuth();
+
   const [items, setItems] = useState([]);
 
+  const [searchParams] = useSearchParams();
+
+  const group = searchParams.get("group_name");
+
   useEffect(() => {
-    setItems(itemsTest);
-  }, []);
+    if (!group || !id) {
+      return;
+    }
+
+    fetch(
+      `http://localhost:3001/educator/sessionsGroup?group=${group}&educator_id=${id}`
+    )
+      .then((res) => res.json())
+      .then(({ data }) => {
+        setItems(data);
+      });
+  }, [group, id]);
 
   const headerItemsToShow = headerItems?.session?.educator?.one || [];
 
   const onEdit = (itemToEdit) => {
-    setItems((prev) =>
-      prev.map((el) => (el.id === itemToEdit.id ? itemToEdit : el))
-    );
-  };
-
-  const onDelete = (deleteId) => {
-    setItems((prev) => prev.filter(({ id }) => id !== deleteId));
+    fetch(
+      `http://localhost:3001/educator/updateSession?score=${itemToEdit.score}&educator_id=${id}&student_id=${itemToEdit.ID_student_exam}`,
+      {
+        method: "PUT",
+      }
+    ).then((res) => {
+      if (!res) {
+        alert("Error");
+        return;
+      }
+      setItems((prev) =>
+        prev.map((el) =>
+          el.ID_student_exam === itemToEdit.ID_student_exam ? itemToEdit : el
+        )
+      );
+    });
   };
 
   return (
@@ -195,12 +192,7 @@ const TeacherCalendar = () => {
         </TableHead>
         <TableBody>
           {items.map((item) => (
-            <EditableCalendarRow
-              key={item.id}
-              item={item}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
+            <EditableCalendarRow key={item.id} item={item} onEdit={onEdit} />
           ))}
         </TableBody>
       </Table>

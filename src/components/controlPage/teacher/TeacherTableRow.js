@@ -14,7 +14,7 @@ const styles = {
   },
 };
 
-const TeacherTableRow = ({ item, onView, onEdit }) => {
+const TeacherTableRow = ({ item, onView, onEdit, variant }) => {
   const { ID_subject, resource_name, student_id, ...otherItems } = item;
 
   const cells = Object.values(otherItems);
@@ -28,11 +28,16 @@ const TeacherTableRow = ({ item, onView, onEdit }) => {
   };
 
   const viewItem = () => {
+    if (variant === "calendar" || variant === "session") {
+      onView(otherItems.group_name);
+      return;
+    }
+
     if (!ID_subject) {
       return;
     }
 
-    onView(ID_subject);
+    onView(ID_subject, resource_name);
   };
 
   return (

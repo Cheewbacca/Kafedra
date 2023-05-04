@@ -58,24 +58,31 @@ const TeacherControlDetails = () => {
   const [searchParams] = useSearchParams();
 
   const subjectId = searchParams.get("subject");
+  const resource = searchParams.get("resource");
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !resource) {
       return;
     }
 
-    fetch(`http://localhost:3001/educator/controlDetailed?id=${id}`)
+    fetch(
+      `http://localhost:3001/educator/controlDetailed?id=${id}&resource=${resource}`
+    )
       .then((res) => res.json())
       .then(({ data }) => {
+        if (!data) {
+          alert("Invalid permissions!");
+          return;
+        }
         setItems(data);
       });
-  }, [id]);
+  }, [id, resource]);
 
   const headerItemsToShow = headerItems?.current?.educator?.one || [];
 
   const onEdit = (id) => {
     navigate(
-      `/teacher/control/detailsControl/edit?id=${id}&subject=${subjectId}`
+      `/teacher/control/detailsControl/edit?id=${id}&subject=${subjectId}&resource=${resource}`
     );
   };
 

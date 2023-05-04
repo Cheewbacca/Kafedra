@@ -52,7 +52,7 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
     student_name_surname: name,
     score_date: date.format("YYYY-MM-DD"),
     score: note,
-    type_of_control: controlType,
+    type_of_control: controlType || otherItems.type_of_control,
     ID_math_score: id,
     isNew: false,
   };
@@ -89,12 +89,12 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
     setNote(newNote);
   };
 
-  const changeControlType = (e) => {
-    setControlType(e.target.value);
-  };
-
   const changeDate = (newValue) => {
     setDate(newValue);
+  };
+
+  const changeControlType = (e) => {
+    setControlType(e.target.value);
   };
 
   const Content = () => {
@@ -127,11 +127,17 @@ const TeacherEditableTableRow = ({ item, onEdit, onDelete, onCreate }) => {
           />
         </TableCell>
         <TableCell>
-          <StyledSelect
-            value={controlType}
-            onChange={changeControlType}
-            options={options}
-          ></StyledSelect>
+          {isNew ? (
+            <StyledSelect
+              value={controlType}
+              onChange={changeControlType}
+              options={options}
+            ></StyledSelect>
+          ) : (
+            <Typography
+              children={controlVariants[otherItems.type_of_control]}
+            />
+          )}
         </TableCell>
       </>
     );

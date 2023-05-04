@@ -18,6 +18,7 @@ const StudentControlPage = ({ variant }) => {
   const [searchParams] = useSearchParams();
 
   const table = searchParams.get("table");
+  const resourceFromApi = searchParams.get("resource");
 
   const [selectValue, setSelectValue] = useState("");
 
@@ -40,7 +41,13 @@ const StudentControlPage = ({ variant }) => {
         return;
       }
 
-      fetch(`http://localhost:3001/student/controlDetailed?id=${id}`)
+      if (!resourceFromApi) {
+        return;
+      }
+
+      fetch(
+        `http://localhost:3001/student/controlDetailed?id=${id}&resource=${resourceFromApi}`
+      )
         .then((res) => res.json())
         .then(({ data }) => {
           setTableItems(data);
@@ -58,7 +65,7 @@ const StudentControlPage = ({ variant }) => {
           setTableItems(data);
         });
     }
-  }, [id, variant, table]);
+  }, [id, variant, table, resourceFromApi]);
 
   useEffect(() => {
     if (variant === "details") {
@@ -82,8 +89,11 @@ const StudentControlPage = ({ variant }) => {
     setCurrentTable("all");
   };
 
-  const onView = () => {
-    navigate("/student/control/details");
+  const onView = (resource) => {
+    if (!resource) {
+      return;
+    }
+    navigate(`/student/control/details?resource=${resource}`);
   };
 
   const headerItemsToShow =

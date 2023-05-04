@@ -32,6 +32,10 @@ const StudentTableRow = ({ item, onView }) => {
 
   const removeActions = table !== "current" && table;
 
+  const viewTable = () => {
+    onView(resource_name);
+  };
+
   return (
     <TableRow>
       {cells.map((data, index) => (
@@ -44,7 +48,7 @@ const StudentTableRow = ({ item, onView }) => {
           <Box display="flex">
             {currentPage === "control" && (
               <IconButton
-                onClick={onView}
+                onClick={viewTable}
                 sx={[styles.icon, { ml: 3 }]}
                 children={<FindInPage />}
               />

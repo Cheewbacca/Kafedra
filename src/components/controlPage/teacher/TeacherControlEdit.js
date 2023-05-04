@@ -61,18 +61,21 @@ const TeacherControlEdit = () => {
 
   const studentId = searchParams.get("id");
   const subjectId = searchParams.get("subject");
+  const resource = searchParams.get("resource");
 
   useEffect(() => {
-    if (!studentId) {
+    if (!studentId || !resource) {
       return;
     }
 
-    fetch(`http://localhost:3001/educator/controlStudent?id=${studentId}`)
+    fetch(
+      `http://localhost:3001/educator/controlStudent?id=${studentId}&resource=${resource}`
+    )
       .then((res) => res.json())
       .then(({ data }) => {
         setItems(data);
       });
-  }, [studentId]);
+  }, [studentId, resource]);
 
   const headerItemsToShow = headerItems?.current?.educator?.additional || [];
 
@@ -81,6 +84,7 @@ const TeacherControlEdit = () => {
       score: itemToEdit.score,
       educator_id: +id,
       id_math: itemToEdit.ID_math_score,
+      resource,
     });
 
     fetch(
@@ -131,6 +135,7 @@ const TeacherControlEdit = () => {
         type_of_control: newItem.type_of_control,
         educator_id: id,
         subject_id: subjectId,
+        resource,
       }),
       headers: {
         "Content-Type": "application/json",
