@@ -40,7 +40,7 @@ const TeacherCurrentControl = ({ variant }) => {
     }
   }, [id, variant]);
 
-  if (role !== "educator" || role !== "admin") {
+  if (role !== "educator" && role !== "admin") {
     return null;
   }
 

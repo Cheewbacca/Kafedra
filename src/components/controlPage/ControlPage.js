@@ -30,7 +30,7 @@ const ControlPage = () => {
     setSelectValue(table || controlPageSelectOptions[0].value);
   }, [table]);
 
-  if (role !== "educator" || role !== "admin") {
+  if (role !== "educator" && role !== "admin") {
     return null;
   }
 
