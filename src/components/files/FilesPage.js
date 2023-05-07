@@ -23,7 +23,7 @@ const FilesPage = () => {
   const [files, setFiles] = useState([]);
 
   const getFiles = () => {
-    if (role === "methodist") {
+    if (role === "methodist" || role === "admin") {
       return fetch(`/allFiles`)
         .then((res) => res.json())
         .then(({ data }) => {
