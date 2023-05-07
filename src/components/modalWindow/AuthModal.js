@@ -3,7 +3,7 @@ import Img from "./modal.svg";
 import { useModalState } from "./ModalContext";
 import Form from "./Form";
 
-const styles = {
+export const styles = {
   modal: {
     position: "absolute",
     width: "100%",

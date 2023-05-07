@@ -9,6 +9,7 @@ import TeacherControlDetails from "./controlPage/teacher/TeacherControlDetails";
 import TeacherControlEdit from "./controlPage/teacher/TeacherControlEdit";
 import TeacherCalendar from "./controlPage/teacher/TeacherCalendar";
 import TeacherSession from "./controlPage/teacher/TeacherSession";
+import FilesPage from "./files/FilesPage";
 
 const Layout = () => (
   <>
@@ -39,6 +40,7 @@ const Layout = () => (
             path="/teacher/control/detailsSession"
             element={<TeacherSession />}
           />
+          <Route path="/documents" element={<FilesPage />} />
         </Routes>
       </Box>
     </Box>
