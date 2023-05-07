@@ -19,6 +19,7 @@ const styles = {
   logoBox: {
     display: "flex",
     alignItems: "center",
+    cursor: "pointer",
     "& svg": {
       mr: "24px",
     },
@@ -62,10 +63,14 @@ const Header = () => {
   const { role = "student" } = authData;
 
   const menuItems = [
-    {
-      url: role === "student" ? "/student/control" : "/teacher/control",
-      text: "Контроль",
-    },
+    ...(role === "methodist"
+      ? []
+      : [
+          {
+            url: role === "student" ? "/student/control" : "/teacher/control",
+            text: "Контроль",
+          },
+        ]),
     {
       url: "/documents",
       text: "Нормативні документи",
@@ -82,6 +87,10 @@ const Header = () => {
     sessionStorage.removeItem("login");
   };
 
+  const goToMainPage = () => {
+    navigate("/");
+  };
+
   const avatarData = [authData.firstName, authData.lastName]
     .map((str) => str && str[0])
     .join(".");
@@ -89,7 +98,7 @@ const Header = () => {
   return (
     <Box component="header" sx={styles.wrapper}>
       <Box className="container" sx={styles.content}>
-        <Box sx={styles.logoBox}>
+        <Box sx={styles.logoBox} onClick={goToMainPage}>
           <Logo />
           <Typography variant="h1" children="Study with KPI" />
         </Box>

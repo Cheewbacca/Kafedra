@@ -19,13 +19,15 @@ const ScheduleButton = ({ text }) => {
 
   const teacherFullName = [lastName, firstName, fatherName].join(" ");
 
+  const isMethodist = role === "methodist";
+
   const isStudent = role === "student";
 
   const scheduleId = isStudent
     ? paths[role][group]
     : paths?.[role]?.[teacherFullName];
 
-  if (!scheduleId) {
+  if (!scheduleId && !isMethodist) {
     return null;
   }
 
@@ -37,10 +39,12 @@ const ScheduleButton = ({ text }) => {
     ? `?groupId=${scheduleId}`
     : `?lecturerId=${scheduleId}`;
 
+  const href = isMethodist ? "https://schedule.kpi.ua" : pathname + search;
+
   return (
     <Link
       component="a"
-      href={pathname + search}
+      href={href}
       rel="noreferrer"
       target="_blank"
       sx={styles.link}
