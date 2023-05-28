@@ -3,13 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import MainPage from "./mainPage/MainPage";
-import ControlPage from "./controlPage/ControlPage";
-import StudentControlPage from "./controlPage/StudentControlPage";
-import TeacherControlDetails from "./controlPage/teacher/TeacherControlDetails";
-import TeacherControlEdit from "./controlPage/teacher/TeacherControlEdit";
-import TeacherCalendar from "./controlPage/teacher/TeacherCalendar";
-import TeacherSession from "./controlPage/teacher/TeacherSession";
-import FilesPage from "./files/FilesPage";
+import MindsPage from "./minds/MindsPage";
+import MindsDetailedPage from "./minds/MindsDetailedPage";
+import WishPage from "./wishes/WishPage";
+import WishDetailedPage from "./wishes/WishDetailedPage";
 
 const Layout = () => (
   <>
@@ -18,29 +15,12 @@ const Layout = () => (
       <Box className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/student/control" element={<StudentControlPage />} />
-          <Route
-            path="/student/control/details"
-            element={<StudentControlPage variant="details" />}
-          />
-          <Route path="/teacher/control" element={<ControlPage />} />
-          <Route
-            path="/teacher/control/detailsControl"
-            element={<TeacherControlDetails />}
-          />
-          <Route
-            path="/teacher/control/detailsControl/edit"
-            element={<TeacherControlEdit />}
-          />
-          <Route
-            path="/teacher/control/detailsCalendar"
-            element={<TeacherCalendar />}
-          />
-          <Route
-            path="/teacher/control/detailsSession"
-            element={<TeacherSession />}
-          />
-          <Route path="/documents" element={<FilesPage />} />
+          <Route path="/my-minds" element={<MindsPage />} />
+          <Route path="/my-minds/:id" element={<MindsDetailedPage />} />
+          <Route path="/my-minds/add" element={<MindsDetailedPage />} />
+          <Route path="/wish-list" element={<WishPage />} />
+          <Route path="/wish-list/:id" element={<WishDetailedPage />} />
+          <Route path="/wish-list/add" element={<WishDetailedPage />} />
         </Routes>
       </Box>
     </Box>

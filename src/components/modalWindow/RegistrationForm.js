@@ -8,7 +8,6 @@ import {
 import { useState } from "react";
 import StyledButton from "../UI/StyledButton";
 import Login from "../../icons/Login";
-import { useAuth } from "../../AuthContext";
 import { useModalState } from "./ModalContext";
 
 const styles = {
@@ -41,9 +40,11 @@ const styles = {
   },
 };
 
-const Form = () => {
-  const { setAuthData } = useAuth();
-  const { toggleModal } = useModalState();
+const emailCheck =
+  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const RegistrationForm = () => {
+  const { toggleRegistration } = useModalState();
 
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -56,14 +57,14 @@ const Form = () => {
     setPassword(e.target.value);
   };
 
-  const makeAuth = (e) => {
+  const register = (e) => {
     e.preventDefault();
 
     if (!login || !password) {
       return;
     }
 
-    fetch("/login", {
+    fetch("/register", {
       method: "POST",
       body: JSON.stringify({ login, password }),
       headers: {
@@ -72,18 +73,14 @@ const Form = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        const user = res?.data;
-
-        if (!user) {
-          alert("Error");
-          return;
+        if (res.success === true) {
+          alert("Реєстрація успішна !");
+        } else {
+          alert("Упс, щось пішло не так");
         }
-
-        setAuthData(user);
-        sessionStorage.setItem("login", JSON.stringify(user));
       })
       .then(() => {
-        toggleModal();
+        toggleRegistration();
       });
   };
 
@@ -91,11 +88,17 @@ const Form = () => {
     <Box sx={styles.wrapper} component="form">
       <FormControl sx={styles.formControl} required>
         <FormLabel sx={styles.label} variant="body2" htmlFor="login">
-          Ваш логін
+          Ваш email
         </FormLabel>
-        <TextField id="login" value={login} onChange={changeLogin} required />
-        {!login && (
-          <FormHelperText error={!login} children="Fill login field" />
+        <TextField
+          id="login"
+          value={login}
+          onChange={changeLogin}
+          type="email"
+          required
+        />
+        {(!login || !emailCheck.test(login)) && (
+          <FormHelperText error={!login} children="Wrong email" />
         )}
       </FormControl>
 
@@ -119,9 +122,9 @@ const Form = () => {
           disableRipple
           variant="text"
           startIcon={<Login />}
-          text="Авторизація"
+          text="Реєстрація"
           colorVariant="blue"
-          onClick={makeAuth}
+          onClick={register}
           type="submit"
           disabled={!login || !password}
         />
@@ -130,4 +133,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default RegistrationForm;

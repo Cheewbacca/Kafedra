@@ -33,19 +33,11 @@ const Banner = () => {
   return (
     <Paper sx={styles.banner} elevation={0}>
       <Box sx={styles.bannerInner}>
-        <Typography
-          variant="h2"
-          children="Раді вітати вас у КПІ ім. Ігоря СІкорського!"
-          gutterBottom
-        />
+        <Typography variant="h2" children="Щоденник вдячності!" gutterBottom />
         <Typography
           variant="h4"
-          children="Тут ви зможете знайти інформацію про поточний контроль, дізнатись розклад та подивитись нормативні документи."
+          children="Ласкаво просимо на наш сайт щоденника вдячності, де можна розпочати свій день з дозою позитиву та поділитися своїми найсвітлішими моментами!"
           gutterBottom
-        />
-        <Typography
-          variant="h5"
-          children="Сайт від учнів для учнів та вчителів."
         />
       </Box>
       {!authData.id && (

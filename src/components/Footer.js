@@ -27,11 +27,11 @@ const Footer = () => (
     <Box className="container" sx={styles.content}>
       <Box sx={styles.logoBox}>
         <Logo fill="white" />
-        <Typography color="white" variant="h1" children="Study with KPI" />
+        <Typography color="white" variant="h1" children="Щоденник вдячності!" />
       </Box>
       <Box mt={3}>
         <Typography>
-          Даний прототип виконав Стурчак Максим для магістерської дисертації.
+          Вітаємо у світі вдячності: Щоденник, що розкриває сили подяки
         </Typography>
       </Box>
     </Box>

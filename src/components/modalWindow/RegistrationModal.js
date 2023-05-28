@@ -1,7 +1,7 @@
 import { Box, CardMedia, Modal, Paper, Typography } from "@mui/material";
 import Img from "./modal.svg";
 import { useModalState } from "./ModalContext";
-import Form from "./Form";
+import RegistrationForm from "./RegistrationForm";
 
 export const styles = {
   modal: {
@@ -24,21 +24,25 @@ export const styles = {
   },
 };
 
-const AuthModal = () => {
-  const { open, toggleModal } = useModalState("login");
+const RegistrationModal = () => {
+  const { openRegistration, toggleRegistration } = useModalState();
 
   return (
-    <Modal sx={styles.modal} open={open} onClose={toggleModal}>
+    <Modal
+      sx={styles.modal}
+      open={openRegistration}
+      onClose={toggleRegistration}
+    >
       <Paper sx={styles.wrapper} elevation={0}>
         <CardMedia src={Img} component="img" title="Some title" />
         <Typography variant="h3" children="Щоденник вдячності!" gutterBottom />
-        <Typography children="Ласкаво просимо на наш сайт щоденника вдячності" />
+        <Typography children="Реєстрація" />
         <Box mt={1}>
-          <Form />
+          <RegistrationForm />
         </Box>
       </Paper>
     </Modal>
   );
 };
 
-export default AuthModal;
+export default RegistrationModal;

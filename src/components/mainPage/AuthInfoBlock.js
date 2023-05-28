@@ -38,7 +38,7 @@ const styles = {
 };
 
 const AuthInfoBlock = () => {
-  const { toggleModal } = useModalState();
+  const { toggleRegistration } = useModalState();
   const { authData } = useAuth();
 
   if (authData.id) {
@@ -68,9 +68,9 @@ const AuthInfoBlock = () => {
           disableRipple
           variant="text"
           startIcon={<Pencil />}
-          text="Авторизація"
+          text="Реєстрація"
           colorVariant="link"
-          onClick={toggleModal}
+          onClick={toggleRegistration}
         />
       </Box>
     </Paper>
