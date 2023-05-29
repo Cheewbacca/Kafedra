@@ -29,8 +29,8 @@ function getCookie(name, getDate = false) {
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-function deleteCookie(expiresGMT) {
-  document.cookie = `cookie1=day/${expiresGMT}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+function deleteCookie(stringId, expiresGMT) {
+  document.cookie = `${stringId}=day/${expiresGMT}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
 }
 
 const MindsPage = () => {
@@ -40,6 +40,8 @@ const MindsPage = () => {
   const { authData } = useAuth();
 
   const { id } = authData;
+
+  const stringId = id?.toString() || "";
 
   const navigate = useNavigate();
 
@@ -52,7 +54,7 @@ const MindsPage = () => {
       return;
     }
 
-    const day = getCookie("cookie1");
+    const day = getCookie(stringId);
 
     if (day) {
       setDisabled(true);
@@ -78,7 +80,7 @@ const MindsPage = () => {
   }, [id]);
 
   const addMind = () => {
-    const day = getCookie("cookie1");
+    const day = getCookie(stringId);
 
     if (day) {
       return;
@@ -99,7 +101,7 @@ const MindsPage = () => {
 
     const expiresGMT = expires.toGMTString();
 
-    document.cookie = `cookie1=day/${expiresGMT}; expires=${expiresGMT}; path=/`;
+    document.cookie = `${stringId}=day/${expiresGMT}; expires=${expiresGMT}; path=/`;
     navigate("/my-minds/add");
   };
 
@@ -119,7 +121,7 @@ const MindsPage = () => {
 
     const expiresGMT = expires.toGMTString();
 
-    const day = getCookie("cookie1");
+    const day = getCookie(stringId);
 
     fetch(`/deleteMind?id=${id}`, {
       method: "DELETE",
@@ -132,7 +134,7 @@ const MindsPage = () => {
         if (res?.status === true) {
           setList((prev) => prev.filter((el) => el.id !== id));
           if (day.split("/").pop() === expiresGMT) {
-            deleteCookie(expiresGMT);
+            deleteCookie(stringId, expiresGMT);
             setDisabled(false);
           }
           alert("Видалено");

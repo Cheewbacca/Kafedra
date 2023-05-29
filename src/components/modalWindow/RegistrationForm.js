@@ -5,10 +5,11 @@ import {
   TextField,
   FormHelperText,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import StyledButton from "../UI/StyledButton";
 import Login from "../../icons/Login";
 import { useModalState } from "./ModalContext";
+import { useAuth } from "../../AuthContext";
 
 const styles = {
   wrapper: {
@@ -45,15 +46,21 @@ const emailCheck =
 
 const RegistrationForm = () => {
   const { toggleRegistration } = useModalState();
+  const { setAuthData } = useAuth();
+
+  const loginRef = useRef(false);
+  const passRef = useRef(false);
 
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
   const changeLogin = (e) => {
+    loginRef.current = true;
     setLogin(e.target.value);
   };
 
   const changePassword = (e) => {
+    passRef.current = true;
     setPassword(e.target.value);
   };
 
@@ -73,11 +80,15 @@ const RegistrationForm = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.success === true) {
-          alert("Реєстрація успішна !");
-        } else {
-          alert("Упс, щось пішло не так");
+        const user = res?.data;
+
+        if (!user) {
+          alert("Error");
+          return;
         }
+
+        setAuthData(user);
+        sessionStorage.setItem("login", JSON.stringify(user));
       })
       .then(() => {
         toggleRegistration();
@@ -97,7 +108,7 @@ const RegistrationForm = () => {
           type="email"
           required
         />
-        {(!login || !emailCheck.test(login)) && (
+        {(!login || !emailCheck.test(login)) && loginRef.current && (
           <FormHelperText error={!login} children="Wrong email" />
         )}
       </FormControl>
@@ -112,7 +123,7 @@ const RegistrationForm = () => {
           type="password"
           required
         />
-        {!password && (
+        {!password && passRef.current && (
           <FormHelperText error={!password} children="Fill password field" />
         )}
       </FormControl>

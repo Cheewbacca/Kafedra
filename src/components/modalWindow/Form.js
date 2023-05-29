@@ -5,7 +5,7 @@ import {
   TextField,
   FormHelperText,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import StyledButton from "../UI/StyledButton";
 import Login from "../../icons/Login";
 import { useAuth } from "../../AuthContext";
@@ -45,14 +45,19 @@ const Form = () => {
   const { setAuthData } = useAuth();
   const { toggleModal } = useModalState();
 
+  const loginRef = useRef(false);
+  const passRef = useRef(false);
+
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
   const changeLogin = (e) => {
+    loginRef.current = true;
     setLogin(e.target.value);
   };
 
   const changePassword = (e) => {
+    passRef.current = true;
     setPassword(e.target.value);
   };
 
@@ -94,7 +99,7 @@ const Form = () => {
           Ваш логін
         </FormLabel>
         <TextField id="login" value={login} onChange={changeLogin} required />
-        {!login && (
+        {!login && loginRef.current && (
           <FormHelperText error={!login} children="Fill login field" />
         )}
       </FormControl>
@@ -109,7 +114,7 @@ const Form = () => {
           type="password"
           required
         />
-        {!password && (
+        {!password && passRef.current && (
           <FormHelperText error={!password} children="Fill password field" />
         )}
       </FormControl>
